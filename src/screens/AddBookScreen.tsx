@@ -6,7 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 const AddBookScreen = ({ onCloseIconPress }) => {
     return (
         <SafeAreaView>
-            <FontAwesome name="window-close" size={30} color="#E81D1D" onPress={onCloseIconPress} />
+            <FontAwesome style={{ margin: 20 }} name="window-close" size={35} color="#E81D1D" onPress={onCloseIconPress} />
         </SafeAreaView>
     )
 }
