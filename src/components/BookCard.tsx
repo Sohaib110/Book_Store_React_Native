@@ -8,9 +8,10 @@ interface HomeScreenProps {
     price: string;
     authorName: string;
     imageURI: string;
+    onDeleteItem: () => void;
 }
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ title, price, authorName, imageURI }) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({ title, price, authorName, imageURI, onDeleteItem }) => {
     return (
         <View style={styles.container}>
             {/* Image Section */}
@@ -26,7 +27,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ title, price, authorName, image
             </View>
             {/* Delete and Edit Section */}
             <View style={styles.deleteEditContainer}>
-                <TouchableOpacity style={styles.circleButton} >
+                <TouchableOpacity style={styles.circleButton}  onPress={onDeleteItem}>
                     <MaterialIcons name="delete-outline" size={24} color="red" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.circleButton}><AntDesign name="edit" size={20} color="blue" /></TouchableOpacity>
@@ -91,5 +92,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginStart: 10,
 
-    }
+    },
 })
