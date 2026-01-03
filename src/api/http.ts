@@ -37,14 +37,7 @@ export const deleteBookByID = async ({ onSuccess, onError, itemID }) => {
 }
 
 
-const body = {
-  name_of_author: "Angel",
-  cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR53zC4cpDSR6-1QvFkRaC5M5_cWn3m76I0mA&s",
-  price_of_book: 99,
-  email_of_seller: "angel@hotmail.com",
-}
-
-export const createBook = async ({ onSuccess, onError }) => {
+export const createBook = async ({ onSuccess, onError, body }) => {
   try {
     const response = await axios.post(endpointURL, body)
 
@@ -56,9 +49,9 @@ export const createBook = async ({ onSuccess, onError }) => {
   }
 }
 
-export const updateBook = async ({ onSuccess, onError }) => {
+export const updateBook = async ({ onSuccess, onError, body, itemID }) => {
   try {
-    const response = await axios.put(`${endpointURL}/7`, body)
+    const response = await axios.put(`${endpointURL}/${itemID}`, body)
 
     Alert.alert("Book Has Been Updated!")
     onSuccess && onSuccess(response.data);

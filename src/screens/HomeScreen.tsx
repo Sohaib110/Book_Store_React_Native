@@ -11,6 +11,8 @@ const HomeScreen = () => {
 
   const [bookList, setBookList] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
 
   const getListOfBooksFN = () => {
     getListOfBooks({
@@ -35,6 +37,12 @@ const HomeScreen = () => {
       onError: (error) => console.log("An error occurred while deleting the book:", error),
       itemID: item.id,
     });
+
+  }
+  const onEditItem = (item) => {
+    setModalVisible(true);
+    setSelectedItem(item);
+    // Implement edit functionality here
   }
 
   return (
@@ -42,11 +50,20 @@ const HomeScreen = () => {
       <FlatList
         data={bookList}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <BookCard authorName={item.name_of_author} price={item.price} imageURI={item.cover} title={item.title} onDeleteItem={() => onDeleteItem(item)} />}
+        renderItem={({ item }) => <BookCard authorName={item.name_of_author} price={item.price} imageURI={item.cover} title={item.title} onDeleteItem={() => onDeleteItem(item)}
+          onEditItem={() => onEditItem(item)}
+        />}
       />
-      <AddButton onPress={() => setModalVisible(true)} />
+      <AddButton onPress={() => {
+        setModalVisible(true);
+        setSelectedItem(null);
+      }} />
       <Modal visible={modalVisible} animationType="slide">
-        <AddBookScreen onCloseIconPress={() => setModalVisible(false)} />
+        <AddBookScreen
+          onCloseIconPress={() => setModalVisible(false)}
+          onCreateSuccess={() => getListOfBooksFN()}
+          selectedItem={selectedItem}
+        />
       </Modal>
     </SafeAreaView>
   )

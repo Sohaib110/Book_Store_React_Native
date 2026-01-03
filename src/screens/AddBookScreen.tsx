@@ -1,16 +1,50 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AppTextInput from '../components/AppTextInput';
 import AppButton from '../components/AppButton';
+import { createBook } from '../api/http';
 
-const AddBookScreen = ({ onCloseIconPress }) => {
+const AddBookScreen = ({ onCloseIconPress, onCreateSuccess, selectedItem }) => {
 
-    const [bookName, setBookName] = useState();
-    const [authorName, setAuthorName] = useState();
-    const [coverURL, setCoverURL] = useState();
-    const [price, setPrice] = useState();
+    const [bookName, setBookName] = useState(selectedItem?.title ?? "");
+    const [authorName, setAuthorName] = useState( selectedItem?.name_of_author ?? "");
+    const [coverURL, setCoverURL] = useState( selectedItem?.cover ?? "");
+    const [price, setPrice] = useState( selectedItem?.price ?? "");
+
+    const createNewBook = () => {
+        createBook({
+            body: {
+                title: bookName,
+                name_of_author: authorName,
+                cover: coverURL,
+                price: price,
+            },
+            onSuccess: () => {
+                onCloseIconPress()
+                onCreateSuccess()
+            },
+            onError: () => { Alert.alert("Error occurred while creating the book") },
+        })
+    }
+    
+    const editBook = () => {
+        updateBook({
+            body: {
+                id: selectedItem.id,
+                title: bookName,
+                name_of_author: authorName,
+                cover: coverURL,
+                price: price,
+            },
+            onSuccess: () => {
+                onCloseIconPress()
+                onCreateSuccess()
+            },
+            onError: () => { Alert.alert("Error occurred while creating the book") },
+        })
+    }
 
     return (
         <SafeAreaView>
@@ -21,7 +55,7 @@ const AddBookScreen = ({ onCloseIconPress }) => {
                 <AppTextInput value={authorName} onChangeText={setAuthorName} placeholder={"Author Name"} keyboardType={"default"} />
                 <AppTextInput value={coverURL} onChangeText={setCoverURL} placeholder={"Cover Image"} keyboardType={"default"} />
                 <AppTextInput value={price} onChangeText={setPrice} keyboardType={"numeric"} placeholder={"Price"} />
-                <AppButton onPress={onCloseIconPress} />
+                <AppButton onPress={!!selectedItem ? editBook : createNewBook} />
             </View>
 
         </SafeAreaView>
